@@ -1,0 +1,41 @@
+# —> 從 selenium 引入 webdriver
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+# —> 引入 BeautifulSoup 和 time 的套件
+from bs4 import BeautifulSoup
+import time
+# 引入 os 套件 —> 提供許多系統端的 function ，取得路路徑、系統版本等資料..
+import os
+import csv
+# —> 初始化瀏覽器的選項別
+options = Options()
+# —> 設定選項為 “headless” 和無 gpu 模式
+# options.add_argument(‘--headless') #背景執行無標頭版本
+# options.add_argument('--disable-gpu') #關掉gpu讓系統負擔較小
+driver = webdriver.Chrome(os.getcwd()+"/chromedriver", chrome_options=options)
+# 使⽤用 webdrive 的 get 語法獲取⾴頁⾯面
+driver.get("https://www.ptt.cc/bbs/Baseball/index11146.html")
+
+#將獲取⾴頁⾯面的 HTML 儲存進 sourceCode中
+sourceCode = BeautifulSoup(driver.page_source,"html.parser")
+#把主詰點div.r-list內的所有元素抓起來
+smetaSection = sourceCode.select('div.r-list-container')
+#把主詰點div.r-list內的所有資料詰點div.r-ent的所有元素抓起來
+sections = smetaSection.select('div.r-ent')
+try:
+    with open('data.csv','w',newline='',encoding='utf_8_sig') as csvfile:
+        for section in sections:
+            title = section.select('div.title')[0].text
+            num = section.select('div.nrec')[0].text 
+            author = section.select('div.author')[0].text
+            date = section.select('div.date')[0].text
+            print(title)
+            print(num)
+            print(author)
+            print(date)
+            writer = csv.writer(csvfile)
+            writer = writerow([num,title,author,date])
+        
+        driver.close()
+except:
+    driver.close()
