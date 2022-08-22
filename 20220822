@@ -14,11 +14,12 @@ options = Options()
 # options.add_argument('--disable-gpu') #關掉gpu讓系統負擔較小
 driver = webdriver.Chrome(os.getcwd()+"/chromedriver", chrome_options=options)
 # 使⽤用 webdrive 的 get 語法獲取⾴頁⾯面
-driver.get("https://www.ptt.cc/bbs/Baseball/index11146.html")
+driver.get("https://www.ptt.cc/bbs/Baseball/index11145.html")
 
 #將獲取⾴頁⾯面的 HTML 儲存進 sourceCode中
 sourceCode = BeautifulSoup(driver.page_source,"html.parser")
 #把主詰點div.r-list內的所有元素抓起來
+#"r-list-container" 抓取的元素，會被存到一個陣列
 smetaSection = sourceCode.select('div.r-list-container')[0]
 #把主詰點div.r-list內的所有資料詰點div.r-ent的所有元素抓起來
 sections = smetaSection.select('div.r-ent')
@@ -37,5 +38,7 @@ try:
             writer = writerow([num,title,author,date])
         
         driver.close()
-except:
-    driver.close()
+        
+except Exception as e:
+ traceback.print_exc()
+print(e)
