@@ -35,7 +35,7 @@ try:
             print(author)
             print(date)
             writer = csv.writer(csvfile)
-            writer = writerow([num,title,author,date])
+            writer.writerow([num, title, author, date])
         
         driver.close()
         
